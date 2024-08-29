@@ -58,9 +58,9 @@ def logout(driver):
 
 
 if __name__ == '__main__':
-    phone = '375445725892'
-    password = 'CyberPepega12431'
-    new_password = 'CyberPepega12431'
+    phone = ''
+    password = ''
+    new_password = ''
     text = 'Самое главное - это то что Микаса убила Эрена'
 
 
