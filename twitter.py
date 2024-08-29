@@ -62,7 +62,17 @@ def check_approve_email_modal(driver, email, password):
     mail.login(driver, email, password)
 
     driver.get('https://mail.google.com/')
-    sleep(7)
+    sleep(4)
+    driver.find_element(By.XPATH, '//*[@id="gs_lc50"]/input[1]').send_keys('verify@x.com')
+    sleep(0.5)
+    driver.find_element(By.XPATH, '//*[@id="aso_search_form_anchor"]/button[4]').click()
+    sleep(4)
+
+    driver.find_element(By.XPATH, '/html/body/div[6]/div[3]/div/div[2]/div[2]/div/div/div/div[2]/div/div[1]/div/div[2]/div/div/div/div[2]/div[6]/div[1]/div[1]/div[1]/div/table/tbody/tr[1]/td[5]').click()
+    sleep(4)
+
+    code = driver.find_element(By.XPATH, '//*[@id="f7b7d679877a2dc3header"]/tbody/tr[5]/td/strong').text()
+    # в теории мы получили код подтверждения, возвращаемся обратно пихаем куда надо и готово
 
     mail.logout(driver)
 
@@ -89,9 +99,9 @@ if __name__ == '__main__':
 
     login(driver, phone, password)
 
-    # change_password(driver, password, new_password)
-    # create_post(driver, text)
-    check_approve_email_modal(driver, 'dfgg', 'dfgdf')
+    change_password(driver, password, new_password)
+    create_post(driver, text)
+    check_approve_email_modal(driver, '', '')
 
     logout(driver)
 
