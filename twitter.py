@@ -6,6 +6,7 @@ from selenium.webdriver.support.ui import WebDriverWait as Wait
 from selenium.webdriver.support import expected_conditions as EC 
 from selenium.webdriver.support.ui import WebDriverWait 
 from selenium.webdriver.common.action_chains import ActionChains
+import google as mail
 
 def login(driver, phone, password):
     sleep(4)
@@ -41,14 +42,33 @@ def create_post(driver, text):
     driver.find_element(By.XPATH, '//*[@id="react-root"]/div/div/div[2]/header/div/div/div/div[1]/div[3]/a/div/span/div/div/span/span').click()
     sleep(3)
 
-    # driver.find_element(By.XPATH, '').click().send_keys(text)
     autotext = WebDriverWait(driver, 15).until(EC.visibility_of_element_located((By.XPATH, '//*[@id="layers"]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div/div/div[3]/div[2]/div[1]/div/div/div/div[1]/div[2]/div/div/div/div/div/div/div/div/div/div/div/div/div[1]/div/div/div/div/div/div[2]/div/div/div/div')))
     ActionChains(driver).move_to_element(autotext).click(autotext).send_keys(text).perform()
-    sleep(5)
-    WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="layers"]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div/div/div[3]/div[2]/div[1]/div/div/div/div[2]/div[2]/div/div/div/button[2]/div/span/span'))).click()
+    sleep(3)
 
-def check_approve_email_modal(driver):
-    pass
+    WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="layers"]/div[2]/div/div/div/div/div/div[2]/div[2]/div/div/div/div[3]/div[2]/div[1]/div/div/div/div[2]/div[2]/div/div/div/button[2]/div/span/span'))).click()
+    sleep(3)
+
+def check_approve_email_modal(driver, email, password):
+    # тут, если появляется окно подтверждения почты, должно произойти какое то взаимодействие с ним, но
+    # я не понял по каким правилам оно появляется и вообще, для 22-летних старпёров вроде меня,
+    # что такое твиттер и как он работает - это тёмный лес...
+
+    original_window = driver.current_window_handle
+    driver.switch_to.new_window('tab')
+
+    driver.get('https://accounts.google.com/')
+
+    mail.login(driver, email, password)
+
+    driver.get('https://mail.google.com/')
+    sleep(7)
+
+    mail.logout(driver)
+
+    driver.close()
+    driver.switch_to.window(original_window)
+
 
 def logout(driver):
     driver.get('https://x.com/logout')
@@ -61,7 +81,7 @@ if __name__ == '__main__':
     phone = ''
     password = ''
     new_password = ''
-    text = 'Самое главное - это то что Микаса убила Эрена'
+    text = 'И помните - Микаса убила Эрена'
 
 
     driver = uc.Chrome()
@@ -70,7 +90,8 @@ if __name__ == '__main__':
     login(driver, phone, password)
 
     # change_password(driver, password, new_password)
-    create_post(driver, text)
+    # create_post(driver, text)
+    check_approve_email_modal(driver, 'dfgg', 'dfgdf')
 
     logout(driver)
 
